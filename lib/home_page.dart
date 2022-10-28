@@ -21,7 +21,12 @@ class HomePage extends StatelessWidget {
         UsersRouter(),
         ReliefRouter(),
         SettingsRouter(),
+        BluetoothRouter(),
       ],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.navigateTo(const BluetoothRouter()),
+        child: const Icon(Icons.monitor_heart),
+      ),
       bottomNavigationBuilder: (_, tabsRouter) {
         return SalomonBottomBar(
           margin: const EdgeInsets.symmetric(

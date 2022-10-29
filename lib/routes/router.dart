@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:auto_route/empty_router_widgets.dart';
 import 'package:flutter_mobile_app/bluetooth/bluetooth_widget.dart';
 import 'package:flutter_mobile_app/bluetooth/waveform_widget.dart';
+import 'package:flutter_mobile_app/game/game_widget.dart';
 import 'package:flutter_mobile_app/home_page.dart';
 import 'package:flutter_mobile_app/posts/posts_page.dart';
 import 'package:flutter_mobile_app/posts/single_post_page.dart';
@@ -53,6 +54,11 @@ import 'package:flutter_mobile_app/users/users_page.dart';
         path: 'settings',
         name: 'SettingsRouter',
         page: SettingsPage,
+      ),
+      AutoRoute(
+        path: 'game',
+        name: 'GameRouter',
+        page: GameWidget,
       ),
       AutoRoute(
         path: 'bluetooth',

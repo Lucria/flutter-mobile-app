@@ -19,8 +19,9 @@ class _WaveformWidgetState extends State<WaveformWidget> {
   List<int> _buffer = List<int>.empty(growable: true);
 
   final Color waveColour = Colors.redAccent;
-  final limitCount = 1000;
+  final limitCount = 100;
   final dataPoints = <FlSpot>[];
+  final rawSamplePoints = List<int>.empty(growable: true);
 
   double xValue = 0;
   double step = 0.05;
@@ -37,11 +38,15 @@ class _WaveformWidgetState extends State<WaveformWidget> {
       while (dataPoints.length > limitCount) {
         dataPoints.removeAt(0);
       }
-      
-      setState(() {
-        dataPoints.add(FlSpot(xValue, sin(xValue))); // TODO add data here from bluetooth
-      });
-      xValue += step;
+
+      if (rawSamplePoints.isNotEmpty) {
+        double firstValue = rawSamplePoints.first.toDouble();
+        rawSamplePoints.removeAt(0);
+        setState(() {
+          dataPoints.add(FlSpot(xValue, firstValue));
+        });
+        xValue += step;
+      }
     });
   }
 
@@ -66,7 +71,7 @@ class _WaveformWidgetState extends State<WaveformWidget> {
                 ),
               ),
               Text(
-                'sin: ${dataPoints.last.y.toStringAsFixed(1)}',
+                'IR Value: ${dataPoints.last.y.toStringAsFixed(1)}',
                 style: TextStyle(
                   color: waveColour,
                   fontSize: 18,
@@ -78,11 +83,11 @@ class _WaveformWidgetState extends State<WaveformWidget> {
               ),
               SizedBox(
                 width: 300,
-                height: 300,
+                height: 400,
                 child: LineChart(
                   LineChartData(
-                    minY: -1,
-                    maxY: 1,
+                    minY: dataPoints.map((value) => value.y).reduce(min),
+                    maxY: dataPoints.map((value) => value.y).reduce(max),
                     minX: dataPoints.first.x,
                     maxX: dataPoints.last.x,
                     lineTouchData: LineTouchData(enabled: false),
@@ -92,7 +97,7 @@ class _WaveformWidgetState extends State<WaveformWidget> {
                       drawVerticalLine: false,
                     ),
                     lineBarsData: [
-                      sinLine(dataPoints),
+                      waveformLine(dataPoints),
                     ],
                     titlesData: FlTitlesData(
                       show: false,
@@ -105,7 +110,7 @@ class _WaveformWidgetState extends State<WaveformWidget> {
         : Container();
   }
 
-  LineChartBarData sinLine(List<FlSpot> points) {
+  LineChartBarData waveformLine(List<FlSpot> points) {
     return LineChartBarData(
       spots: points,
       dotData: FlDotData(
@@ -115,8 +120,8 @@ class _WaveformWidgetState extends State<WaveformWidget> {
         colors: [waveColour.withOpacity(0), waveColour],
         stops: const [0.1, 1.0],
       ),
-      barWidth: 4,
-      isCurved: false,
+      barWidth: 3,
+      isCurved: true,
     );
   }
 
@@ -135,7 +140,7 @@ class _WaveformWidgetState extends State<WaveformWidget> {
         }
         _buffer.removeRange(0, index + 1);
         String dataPacket = _parseDataReceived(dataPoint);
-        print(_decodeDataPacket(dataPacket));
+        rawSamplePoints.add(_decodeDataPacket(dataPacket));
       } else {
         break; // Must break from while true loop
       }
@@ -148,12 +153,13 @@ class _WaveformWidgetState extends State<WaveformWidget> {
         .map((asciiCode) => String.fromCharCode(asciiCode))
         .join();
   }
-  
+
+  // Decodes various data packets from String to their integer values
   int _decodeDataPacket(String dataPacket) {
     if (dataPacket.startsWith("S")) {
       int sampledValue = int.parse(dataPacket.substring(1));
       return sampledValue;
     }
-    return -999999;
+    return -999999; // Shouldn't reach here!
   }
 }

@@ -34,7 +34,7 @@ class _WaveformWidgetState extends State<WaveformWidget> {
 
     widget.connection.input!.listen(_onDataReceived);
 
-    timer = Timer.periodic(const Duration(milliseconds: 40), (timer) {
+    timer = Timer.periodic(const Duration(milliseconds: 70), (timer) {
       while (dataPoints.length > limitCount) {
         dataPoints.removeAt(0);
       }
@@ -62,14 +62,6 @@ class _WaveformWidgetState extends State<WaveformWidget> {
         ? Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                'x: ${xValue.toStringAsFixed(1)}',
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
               Text(
                 'IR Value: ${dataPoints.last.y.toStringAsFixed(1)}',
                 style: TextStyle(
@@ -120,8 +112,8 @@ class _WaveformWidgetState extends State<WaveformWidget> {
         colors: [waveColour.withOpacity(0), waveColour],
         stops: const [0.1, 1.0],
       ),
-      barWidth: 3,
-      isCurved: true,
+      barWidth: 2,
+      isCurved: false,
     );
   }
 

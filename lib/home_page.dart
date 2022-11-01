@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobile_app/routes/router.gr.dart';
+import 'package:flutter_mobile_app/util/util_widgets.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class HomePage extends StatelessWidget {
@@ -14,6 +16,37 @@ class HomePage extends StatelessWidget {
         title: const Text('Cell-O2'),
         centerTitle: true,
         leading: const AutoLeadingButton(),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () {
+                  FirebaseAuth.instance.signOut().then((value) {
+                    context.router.popUntilRoot();
+                    context.router.parent()!.navigate(const SignInScreen());
+                    // sign_in.SignInScreen()));
+                  });
+                },
+                child: const Icon(
+                  Icons.logout,
+                  size: 26.0,
+                ),
+              )
+          ),
+          Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () {
+                  String userEmail = FirebaseAuth.instance.currentUser!.email!;
+                  showMessage(context, 'Signed in as: $userEmail');
+                },
+                child: const Icon(
+                  Icons.account_circle_outlined,
+                  size: 26.0,
+                ),
+              )
+          )
+        ],
       ),
       backgroundColor: Colors.white,
       routes: const [

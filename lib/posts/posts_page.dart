@@ -20,17 +20,6 @@ class PostsPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(user != null ? 'Signed in as: ' + user!.email! : ""),
-            ElevatedButton(
-              child: const Text("Logout"),
-              onPressed: () {
-                FirebaseAuth.instance.signOut().then((value) {
-                  print("Signed Out");
-                  context.router.parent()!.navigate(const SignInScreen());
-                  // sign_in.SignInScreen()));
-                });
-              },
-            ),
             for (int i = 0; i < posts.length; i++)
               PostTile(
                 tileColor: posts[i].color,

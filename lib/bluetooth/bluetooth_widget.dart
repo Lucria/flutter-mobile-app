@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter_mobile_app/routes/router.gr.dart';
+import 'package:flutter_mobile_app/util/util_widgets.dart';
 
 class BluetoothWidget extends StatefulWidget {
   const BluetoothWidget({Key? key}) : super(key: key);
@@ -263,7 +264,7 @@ class _BluetoothWidgetState extends State<BluetoothWidget> {
                   onPressed: () {
                     connection != null
                       ? context.navigateTo(WaveformWidget(connection: connection!))
-                      : _showMessage("Connection is not available");
+                      : showMessage(context, "Connection is not available");
                   },
                 ),
               ],
@@ -305,20 +306,6 @@ class _BluetoothWidgetState extends State<BluetoothWidget> {
     );
   }
 
-  // Helper method to show SnackBar
-  Future _showMessage(String message, {int duration = 3}) async {
-    await Future.delayed(const Duration(milliseconds: 100));
-    final scaffold = ScaffoldMessenger.of(context);
-    scaffold.showSnackBar(
-      SnackBar(
-        content: Text(
-          message,
-        ),
-        duration: Duration(seconds: duration),
-      ),
-    );
-  }
-
   // Create the List of devices to be shown in Dropdown Menu
   List<DropdownMenuItem<BluetoothDevice>> _getDeviceItems() {
     List<DropdownMenuItem<BluetoothDevice>> items = [];
@@ -341,28 +328,28 @@ class _BluetoothWidgetState extends State<BluetoothWidget> {
   void _connect() async {
     setState(() => _isButtonUnavailable = true);
     if (_connectedDevice == null) {
-      _showMessage('No device selected');
+      showMessage(context, 'No device selected');
       setState(() => _isButtonUnavailable = false);
     } else {
       if (!isArduinoConnected) {
-        _showMessage('Attempting connection to Device');
+        showMessage(context, 'Attempting connection to Device');
         setState(() => _isButtonUnavailable = false);
 
         BluetoothConnection.toAddress(_connectedDevice!.address)
             .then((_connection) {
-          _showMessage('Connected to the device');
+          showMessage(context, 'Connected to the device');
           connection = _connection;
           setState(() => _connected = true);
 
           // connection!.input!.listen(null).onDone(() {
           //   if (isDisconnecting) {
-          //     _showMessage('Disconnecting!');
+          //     showMessage('Disconnecting!');
           //   }
           //   setState(() {});
           // });
         }).catchError((error) {
           // TODO attempt retry by disconnecting and reconnecting
-          _showMessage('Cannot connect, exception: $error');
+          showMessage(context, 'Cannot connect, exception: $error');
         });
       }
     }
@@ -375,7 +362,7 @@ class _BluetoothWidgetState extends State<BluetoothWidget> {
     });
 
     await connection?.close();
-    _showMessage('Device disconnected');
+    showMessage(context, 'Device disconnected');
     if (!connection!.isConnected) {
       setState(() {
         _connected = false;

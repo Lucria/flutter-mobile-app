@@ -13,7 +13,7 @@ class AuthService {
     return user;
   }
 
-  Future<User> HandleSignUp(email, password) async {
+  Future<User> handleSignUp(email, password) async {
     UserCredential result = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
     final User user = result.user!;

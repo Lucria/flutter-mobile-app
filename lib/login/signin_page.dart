@@ -60,7 +60,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       _passwordController.text.trim())
                     .then((value) {
                       setState(() => _isLoading = false);
-                      context.navigateTo(const HomeRoute());
+                      context.navigateTo(const HomeTabNavigationWidget());
                   }).catchError((error) {
                       setState(() => _isLoading = false);
                       showMessage(context, 'Error: $error');

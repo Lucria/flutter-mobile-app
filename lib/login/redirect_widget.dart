@@ -26,7 +26,7 @@ class RedirectController extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.active) {
           final bool signedIn = snapshot.hasData;
           if (signedIn) {
-            context.router.navigate(const HomeRoute());
+            context.router.navigate(const HomeTabNavigationWidget());
           } else {
             context.router.navigate(const SignInScreen());
           }

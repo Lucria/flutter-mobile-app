@@ -40,7 +40,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   visible: _isLoading,
                   child: const CircularProgressIndicator()
                 ),
-                Image.asset('assets/animation.jpg'),
+                Image.asset('assets/IMG_2655.GIF'),
                 reusableTextField("Enter Email", Icons.person_outline, false,
                     _emailController),
                 const SizedBox(

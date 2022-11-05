@@ -66,6 +66,73 @@ Container firebaseUIButton(BuildContext context, String title, Function onTap) {
   );
 }
 
+Widget roundedStatDisplay(Color color, List<Widget> childrenWidgets) {
+  return Container(
+    alignment: Alignment.center,
+    height: 100,
+    width: 100,
+    decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: color, width: 10),
+        borderRadius: BorderRadius.circular(75)),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: childrenWidgets,
+    ),
+  );
+}
+
+Widget paddedHeader(String text, Color color) {
+  return Container(
+    padding: const EdgeInsets.symmetric(vertical: 10),
+    alignment: Alignment.center,
+    child: Text(
+      text,
+      textAlign: TextAlign.center,
+      style: TextStyle(color: color, fontSize: 25),
+    ),
+  );
+}
+
+Widget pictureCard(String imageLink) {
+  return Container(
+    padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+    alignment: Alignment.center,
+    height: 250,
+    width: 400,
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        image: DecorationImage(
+            image: NetworkImage(imageLink),
+            fit: BoxFit.cover)),
+  );
+}
+
+Widget postTextContent(String title, String text) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(
+      vertical: 20,
+    ),
+    child: Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          child: Text(
+            title,
+            style: const TextStyle(
+              fontSize: 32,
+            ),
+          ),
+        ),
+        Text(text,
+            style: const TextStyle(fontSize: 20),
+            textAlign: TextAlign.justify
+        ),
+      ],
+    ),
+  );
+}
+
 // Helper method to show SnackBar
 Future showMessage(BuildContext context, String message, {int duration = 3}) async {
   await Future.delayed(const Duration(milliseconds: 100));

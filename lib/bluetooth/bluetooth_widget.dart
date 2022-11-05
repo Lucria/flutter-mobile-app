@@ -153,14 +153,7 @@ class _BluetoothWidgetState extends State<BluetoothWidget> {
           children: <Widget>[
             Column(
               children: <Widget>[
-                const Padding(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Text(
-                    "Paired Devices",
-                    style: TextStyle(fontSize: 24, color: Colors.blue),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+                paddedHeader("Paired Devices", Colors.blue),
                 Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Row(
@@ -279,7 +272,7 @@ class _BluetoothWidgetState extends State<BluetoothWidget> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   const Text(
-                    "NOTE: If you cannot find the device in the list, please pair the device by going to the Bluetooth settings",
+                    "If you cannot find the heartbeat device in the above list, please pair the device first by going to the Bluetooth settings",
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,

@@ -3,12 +3,12 @@ import 'package:auto_route/empty_router_widgets.dart';
 import 'package:flutter_mobile_app/bluetooth/bluetooth_widget.dart';
 import 'package:flutter_mobile_app/bluetooth/waveform_widget.dart';
 import 'package:flutter_mobile_app/game/game_widget.dart';
-import 'package:flutter_mobile_app/home_page.dart';
+import 'package:flutter_mobile_app/home/home_page.dart';
+import 'package:flutter_mobile_app/home_navigation_widget.dart';
 import 'package:flutter_mobile_app/login/redirect_widget.dart';
 import 'package:flutter_mobile_app/login/reset_password_page.dart';
 import 'package:flutter_mobile_app/login/signin_page.dart';
 import 'package:flutter_mobile_app/login/signup_page.dart';
-import 'package:flutter_mobile_app/posts/posts_page.dart';
 import 'package:flutter_mobile_app/posts/single_post_page.dart';
 import 'package:flutter_mobile_app/relief/relief_page.dart';
 import 'package:flutter_mobile_app/users/user_profile_page.dart';
@@ -26,15 +26,15 @@ import 'package:flutter_mobile_app/relief/emergency_screen.dart';
       AutoRoute(path: 'signIn', page: SignInScreen),
       AutoRoute(path: 'signUp', page: SignUpScreen),
       AutoRoute(path: 'emergencyRelief', page: EmergencyScreen),
-      AutoRoute(path: 'home', page: HomePage, children: [
+      AutoRoute(path: 'home', page: HomeTabNavigationWidget, children: [
         AutoRoute(
           path: 'posts',
-          name: 'PostsRouter',
+          name: 'HomeRouter',
           page: EmptyRouterPage,
           children: [
             AutoRoute(
               path: '',
-              page: PostsPage,
+              page: HomePage
             ),
             AutoRoute(
               path: ':postId',
@@ -44,12 +44,12 @@ import 'package:flutter_mobile_app/relief/emergency_screen.dart';
         ),
         AutoRoute(
           path: 'users',
-          name: 'UsersRouter',
+          name: 'ActivityRouter',
           page: EmptyRouterPage,
           children: [
             AutoRoute(
               path: '',
-              page: UsersPage,
+              page: UsersPage, // TODO implement Activity Page
             ),
             AutoRoute(
               path: ':userId',

@@ -27,33 +27,34 @@ class HomePage extends StatelessWidget {
                       Text(
                         '38', // TODO Temperature Display
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 32),
+
+                        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
                       ),
                       Text(
                         '℃',
-                        style: TextStyle(fontSize: 15),
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
                       ),
                     ]),
                     roundedStatDisplay(Colors.red, const [
                       Text(
-                        '120', // TODO BPM Display
+                        '120',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 32),
+                        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
                       ),
                       Text(
                         'BPM',
-                        style: TextStyle(fontSize: 15),
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
                       ),
                     ]),
                     roundedStatDisplay(
                         const Color.fromARGB(255, 252, 186, 186), const [
                       Text(
                         '35', // TODO O2 Display
-                        style: TextStyle(fontSize: 32),
+                        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
                       ),
                       Text(
                         '%',
-                        style: TextStyle(fontSize: 15),
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
                       ),
                     ]),
                   ]),

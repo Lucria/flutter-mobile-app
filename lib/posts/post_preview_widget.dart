@@ -1,50 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobile_app/data/app_data.dart';
+import 'package:flutter_mobile_app/util/util_widgets.dart';
 
-class PostTile extends StatelessWidget {
-  final Color tileColor;
-  final String postTitle;
+class PostPreviewTile extends StatelessWidget {
+  final Post post;
   final void Function() onTileTap;
 
-  const PostTile({
+  const PostPreviewTile({
     Key? key,
-    required this.tileColor,
-    required this.postTitle,
+    required this.post,
     required this.onTileTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTileTap,
-      child: Card(
-        margin: const EdgeInsets.only(bottom: 20),
-        color: tileColor,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 100,
-            vertical: 40,
-          ),
-          child: Column(
-            children: [
-              Text(
-                postTitle,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...',
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: GestureDetector(
+        onTap: onTileTap,
+        child: Column(
+          children: [
+            pictureCard(post.imageLink),
+            postTextContent(post.title, post.articlePreview)
+          ],
         ),
       ),
     );
   }
 }
 
+// TODO pending deprecation
 class UserAvatar extends StatelessWidget {
   final Color avatarColor;
   final String username;

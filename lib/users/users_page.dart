@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_mobile_app/data/app_data.dart';
 import 'package:flutter_mobile_app/routes/router.gr.dart';
-import 'package:flutter_mobile_app/posts/post_tile_widget.dart';
+import 'package:flutter_mobile_app/posts/post_preview_widget.dart';
 
 class UsersPage extends StatelessWidget {
   const UsersPage({Key? key}) : super(key: key);

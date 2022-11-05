@@ -14,18 +14,19 @@
 import 'package:auto_route/auto_route.dart' as _i17;
 import 'package:auto_route/empty_router_widgets.dart' as _i1;
 import 'package:flutter/material.dart' as _i18;
-import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart' as _i19;
+import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart' as _i20;
 
 import '../bluetooth/bluetooth_widget.dart' as _i15;
 import '../bluetooth/waveform_widget.dart' as _i16;
+import '../data/app_data.dart' as _i19;
 import '../game/game_widget.dart' as _i10;
-import '../home_page.dart' as _i8;
+import '../home/home_page.dart' as _i11;
+import '../home_navigation_widget.dart' as _i8;
 import '../login/redirect_widget.dart' as _i3;
 import '../login/reset_password_page.dart' as _i4;
 import '../login/signin_page.dart' as _i5;
 import '../login/signup_page.dart' as _i6;
 import '../login/welcome_page.dart' as _i2;
-import '../posts/posts_page.dart' as _i11;
 import '../posts/single_post_page.dart' as _i12;
 import '../relief/emergency_screen.dart' as _i7;
 import '../relief/relief_page.dart' as _i9;
@@ -80,19 +81,19 @@ class AppRouter extends _i17.RootStackRouter {
         child: const _i7.EmergencyScreen(),
       );
     },
-    HomeRoute.name: (routeData) {
+    HomeTabNavigationWidget.name: (routeData) {
       return _i17.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i8.HomePage(),
+        child: const _i8.HomeTabNavigationWidget(),
       );
     },
-    PostsRouter.name: (routeData) {
+    HomeRouter.name: (routeData) {
       return _i17.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i1.EmptyRouterPage(),
       );
     },
-    UsersRouter.name: (routeData) {
+    ActivityRouter.name: (routeData) {
       return _i17.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i1.EmptyRouterPage(),
@@ -116,24 +117,19 @@ class AppRouter extends _i17.RootStackRouter {
         child: const _i1.EmptyRouterPage(),
       );
     },
-    PostsRoute.name: (routeData) {
-      final args = routeData.argsAs<PostsRouteArgs>(
-          orElse: () => const PostsRouteArgs());
+    HomeRoute.name: (routeData) {
       return _i17.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i11.PostsPage(key: args.key),
+        child: const _i11.HomePage(),
       );
     },
     SinglePostRoute.name: (routeData) {
-      final pathParams = routeData.inheritedPathParams;
-      final args = routeData.argsAs<SinglePostRouteArgs>(
-          orElse: () =>
-              SinglePostRouteArgs(postId: pathParams.getInt('postId')));
+      final args = routeData.argsAs<SinglePostRouteArgs>();
       return _i17.MaterialPageX<dynamic>(
         routeData: routeData,
         child: _i12.SinglePostPage(
           key: args.key,
-          postId: args.postId,
+          post: args.post,
         ),
       );
     },
@@ -211,58 +207,58 @@ class AppRouter extends _i17.RootStackRouter {
               parent: EmptyRouterRoute.name,
             ),
             _i17.RouteConfig(
-              HomeRoute.name,
+              HomeTabNavigationWidget.name,
               path: 'home',
               parent: EmptyRouterRoute.name,
               children: [
                 _i17.RouteConfig(
-                  PostsRouter.name,
+                  HomeRouter.name,
                   path: 'posts',
-                  parent: HomeRoute.name,
+                  parent: HomeTabNavigationWidget.name,
                   children: [
                     _i17.RouteConfig(
-                      PostsRoute.name,
+                      HomeRoute.name,
                       path: '',
-                      parent: PostsRouter.name,
+                      parent: HomeRouter.name,
                     ),
                     _i17.RouteConfig(
                       SinglePostRoute.name,
                       path: ':postId',
-                      parent: PostsRouter.name,
+                      parent: HomeRouter.name,
                     ),
                   ],
                 ),
                 _i17.RouteConfig(
-                  UsersRouter.name,
+                  ActivityRouter.name,
                   path: 'users',
-                  parent: HomeRoute.name,
+                  parent: HomeTabNavigationWidget.name,
                   children: [
                     _i17.RouteConfig(
                       UsersRoute.name,
                       path: '',
-                      parent: UsersRouter.name,
+                      parent: ActivityRouter.name,
                     ),
                     _i17.RouteConfig(
                       UserProfileRoute.name,
                       path: ':userId',
-                      parent: UsersRouter.name,
+                      parent: ActivityRouter.name,
                     ),
                   ],
                 ),
                 _i17.RouteConfig(
                   ReliefRouter.name,
                   path: 'relief',
-                  parent: HomeRoute.name,
+                  parent: HomeTabNavigationWidget.name,
                 ),
                 _i17.RouteConfig(
                   GameRouter.name,
                   path: 'game',
-                  parent: HomeRoute.name,
+                  parent: HomeTabNavigationWidget.name,
                 ),
                 _i17.RouteConfig(
                   BluetoothRouter.name,
                   path: 'bluetooth',
-                  parent: HomeRoute.name,
+                  parent: HomeTabNavigationWidget.name,
                   children: [
                     _i17.RouteConfig(
                       BluetoothWidget.name,
@@ -369,42 +365,42 @@ class EmergencyScreen extends _i17.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i8.HomePage]
-class HomeRoute extends _i17.PageRouteInfo<void> {
-  const HomeRoute({List<_i17.PageRouteInfo>? children})
+/// [_i8.HomeTabNavigationWidget]
+class HomeTabNavigationWidget extends _i17.PageRouteInfo<void> {
+  const HomeTabNavigationWidget({List<_i17.PageRouteInfo>? children})
       : super(
-          HomeRoute.name,
+          HomeTabNavigationWidget.name,
           path: 'home',
           initialChildren: children,
         );
 
-  static const String name = 'HomeRoute';
+  static const String name = 'HomeTabNavigationWidget';
 }
 
 /// generated route for
 /// [_i1.EmptyRouterPage]
-class PostsRouter extends _i17.PageRouteInfo<void> {
-  const PostsRouter({List<_i17.PageRouteInfo>? children})
+class HomeRouter extends _i17.PageRouteInfo<void> {
+  const HomeRouter({List<_i17.PageRouteInfo>? children})
       : super(
-          PostsRouter.name,
+          HomeRouter.name,
           path: 'posts',
           initialChildren: children,
         );
 
-  static const String name = 'PostsRouter';
+  static const String name = 'HomeRouter';
 }
 
 /// generated route for
 /// [_i1.EmptyRouterPage]
-class UsersRouter extends _i17.PageRouteInfo<void> {
-  const UsersRouter({List<_i17.PageRouteInfo>? children})
+class ActivityRouter extends _i17.PageRouteInfo<void> {
+  const ActivityRouter({List<_i17.PageRouteInfo>? children})
       : super(
-          UsersRouter.name,
+          ActivityRouter.name,
           path: 'users',
           initialChildren: children,
         );
 
-  static const String name = 'UsersRouter';
+  static const String name = 'ActivityRouter';
 }
 
 /// generated route for
@@ -445,27 +441,15 @@ class BluetoothRouter extends _i17.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i11.PostsPage]
-class PostsRoute extends _i17.PageRouteInfo<PostsRouteArgs> {
-  PostsRoute({_i18.Key? key})
+/// [_i11.HomePage]
+class HomeRoute extends _i17.PageRouteInfo<void> {
+  const HomeRoute()
       : super(
-          PostsRoute.name,
+          HomeRoute.name,
           path: '',
-          args: PostsRouteArgs(key: key),
         );
 
-  static const String name = 'PostsRoute';
-}
-
-class PostsRouteArgs {
-  const PostsRouteArgs({this.key});
-
-  final _i18.Key? key;
-
-  @override
-  String toString() {
-    return 'PostsRouteArgs{key: $key}';
-  }
+  static const String name = 'HomeRoute';
 }
 
 /// generated route for
@@ -473,15 +457,14 @@ class PostsRouteArgs {
 class SinglePostRoute extends _i17.PageRouteInfo<SinglePostRouteArgs> {
   SinglePostRoute({
     _i18.Key? key,
-    required int postId,
+    required _i19.Post post,
   }) : super(
           SinglePostRoute.name,
           path: ':postId',
           args: SinglePostRouteArgs(
             key: key,
-            postId: postId,
+            post: post,
           ),
-          rawPathParams: {'postId': postId},
         );
 
   static const String name = 'SinglePostRoute';
@@ -490,16 +473,16 @@ class SinglePostRoute extends _i17.PageRouteInfo<SinglePostRouteArgs> {
 class SinglePostRouteArgs {
   const SinglePostRouteArgs({
     this.key,
-    required this.postId,
+    required this.post,
   });
 
   final _i18.Key? key;
 
-  final int postId;
+  final _i19.Post post;
 
   @override
   String toString() {
-    return 'SinglePostRouteArgs{key: $key, postId: $postId}';
+    return 'SinglePostRouteArgs{key: $key, post: $post}';
   }
 }
 
@@ -567,7 +550,7 @@ class BluetoothWidget extends _i17.PageRouteInfo<void> {
 class WaveformWidget extends _i17.PageRouteInfo<WaveformWidgetArgs> {
   WaveformWidget({
     _i18.Key? key,
-    required _i19.BluetoothConnection connection,
+    required _i20.BluetoothConnection connection,
   }) : super(
           WaveformWidget.name,
           path: 'waveform',
@@ -588,7 +571,7 @@ class WaveformWidgetArgs {
 
   final _i18.Key? key;
 
-  final _i19.BluetoothConnection connection;
+  final _i20.BluetoothConnection connection;
 
   @override
   String toString() {

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mobile_app/util/util_widgets.dart';
 import 'game_model.dart';
 import 'dart:ui' as ui;
 
@@ -21,7 +22,7 @@ class GameState extends State<GameWidget> {
       child: Align(
         alignment: FractionalOffset.bottomCenter,
         child: ElevatedButton(
-          onPressed: () => print("Start Game"),
+          onPressed: () => showMessage(context, "Start Game"),
           child: const Text('Start Game'),
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.red[400]),
@@ -61,7 +62,7 @@ class GameState extends State<GameWidget> {
         children: [
           for (int i = 0; i < 3; i++)
             ElevatedButton(
-              onPressed: () => print(i),
+              onPressed: () => showMessage(context, i.toString()),
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(25),

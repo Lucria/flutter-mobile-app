@@ -14,18 +14,19 @@
 import 'package:auto_route/auto_route.dart' as _i17;
 import 'package:auto_route/empty_router_widgets.dart' as _i1;
 import 'package:flutter/material.dart' as _i18;
-import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart' as _i19;
+import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart' as _i20;
 
 import '../bluetooth/bluetooth_widget.dart' as _i15;
 import '../bluetooth/waveform_widget.dart' as _i16;
+import '../data/app_data.dart' as _i19;
 import '../game/game_widget.dart' as _i10;
+import '../home/home_page.dart' as _i11;
 import '../home_navigation_widget.dart' as _i8;
 import '../login/redirect_widget.dart' as _i3;
 import '../login/reset_password_page.dart' as _i4;
 import '../login/signin_page.dart' as _i5;
 import '../login/signup_page.dart' as _i6;
 import '../login/welcome_page.dart' as _i2;
-import '../posts/posts_page.dart' as _i11;
 import '../posts/single_post_page.dart' as _i12;
 import '../relief/emergency_screen.dart' as _i7;
 import '../relief/relief_page.dart' as _i9;
@@ -116,24 +117,19 @@ class AppRouter extends _i17.RootStackRouter {
         child: const _i1.EmptyRouterPage(),
       );
     },
-    PostsRoute.name: (routeData) {
-      final args = routeData.argsAs<PostsRouteArgs>(
-          orElse: () => const PostsRouteArgs());
+    HomeRoute.name: (routeData) {
       return _i17.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i11.PostsPage(key: args.key),
+        child: const _i11.HomePage(),
       );
     },
     SinglePostRoute.name: (routeData) {
-      final pathParams = routeData.inheritedPathParams;
-      final args = routeData.argsAs<SinglePostRouteArgs>(
-          orElse: () =>
-              SinglePostRouteArgs(postId: pathParams.getInt('postId')));
+      final args = routeData.argsAs<SinglePostRouteArgs>();
       return _i17.MaterialPageX<dynamic>(
         routeData: routeData,
         child: _i12.SinglePostPage(
           key: args.key,
-          postId: args.postId,
+          post: args.post,
         ),
       );
     },
@@ -221,7 +217,7 @@ class AppRouter extends _i17.RootStackRouter {
                   parent: HomeTabNavigationWidget.name,
                   children: [
                     _i17.RouteConfig(
-                      PostsRoute.name,
+                      HomeRoute.name,
                       path: '',
                       parent: HomeRouter.name,
                     ),
@@ -445,27 +441,15 @@ class BluetoothRouter extends _i17.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i11.PostsPage]
-class PostsRoute extends _i17.PageRouteInfo<PostsRouteArgs> {
-  PostsRoute({_i18.Key? key})
+/// [_i11.HomePage]
+class HomeRoute extends _i17.PageRouteInfo<void> {
+  const HomeRoute()
       : super(
-          PostsRoute.name,
+          HomeRoute.name,
           path: '',
-          args: PostsRouteArgs(key: key),
         );
 
-  static const String name = 'PostsRoute';
-}
-
-class PostsRouteArgs {
-  const PostsRouteArgs({this.key});
-
-  final _i18.Key? key;
-
-  @override
-  String toString() {
-    return 'PostsRouteArgs{key: $key}';
-  }
+  static const String name = 'HomeRoute';
 }
 
 /// generated route for
@@ -473,15 +457,14 @@ class PostsRouteArgs {
 class SinglePostRoute extends _i17.PageRouteInfo<SinglePostRouteArgs> {
   SinglePostRoute({
     _i18.Key? key,
-    required int postId,
+    required _i19.Post post,
   }) : super(
           SinglePostRoute.name,
           path: ':postId',
           args: SinglePostRouteArgs(
             key: key,
-            postId: postId,
+            post: post,
           ),
-          rawPathParams: {'postId': postId},
         );
 
   static const String name = 'SinglePostRoute';
@@ -490,16 +473,16 @@ class SinglePostRoute extends _i17.PageRouteInfo<SinglePostRouteArgs> {
 class SinglePostRouteArgs {
   const SinglePostRouteArgs({
     this.key,
-    required this.postId,
+    required this.post,
   });
 
   final _i18.Key? key;
 
-  final int postId;
+  final _i19.Post post;
 
   @override
   String toString() {
-    return 'SinglePostRouteArgs{key: $key, postId: $postId}';
+    return 'SinglePostRouteArgs{key: $key, post: $post}';
   }
 }
 
@@ -567,7 +550,7 @@ class BluetoothWidget extends _i17.PageRouteInfo<void> {
 class WaveformWidget extends _i17.PageRouteInfo<WaveformWidgetArgs> {
   WaveformWidget({
     _i18.Key? key,
-    required _i19.BluetoothConnection connection,
+    required _i20.BluetoothConnection connection,
   }) : super(
           WaveformWidget.name,
           path: 'waveform',
@@ -588,7 +571,7 @@ class WaveformWidgetArgs {
 
   final _i18.Key? key;
 
-  final _i19.BluetoothConnection connection;
+  final _i20.BluetoothConnection connection;
 
   @override
   String toString() {

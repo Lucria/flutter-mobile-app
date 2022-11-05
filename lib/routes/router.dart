@@ -3,12 +3,12 @@ import 'package:auto_route/empty_router_widgets.dart';
 import 'package:flutter_mobile_app/bluetooth/bluetooth_widget.dart';
 import 'package:flutter_mobile_app/bluetooth/waveform_widget.dart';
 import 'package:flutter_mobile_app/game/game_widget.dart';
+import 'package:flutter_mobile_app/home/home_page.dart';
 import 'package:flutter_mobile_app/home_navigation_widget.dart';
 import 'package:flutter_mobile_app/login/redirect_widget.dart';
 import 'package:flutter_mobile_app/login/reset_password_page.dart';
 import 'package:flutter_mobile_app/login/signin_page.dart';
 import 'package:flutter_mobile_app/login/signup_page.dart';
-import 'package:flutter_mobile_app/posts/posts_page.dart';
 import 'package:flutter_mobile_app/posts/single_post_page.dart';
 import 'package:flutter_mobile_app/relief/relief_page.dart';
 import 'package:flutter_mobile_app/users/user_profile_page.dart';
@@ -34,7 +34,7 @@ import 'package:flutter_mobile_app/relief/emergency_screen.dart';
           children: [
             AutoRoute(
               path: '',
-              page: PostsPage, // TODO add HomePage
+              page: HomePage
             ),
             AutoRoute(
               path: ':postId',

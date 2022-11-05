@@ -21,6 +21,12 @@ class _CountDownTimerState extends State<CountDownTimer> {
   late Timer _timer;
 
   @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     maxSeconds = widget.seconds;

@@ -256,8 +256,9 @@ class _BluetoothWidgetState extends State<BluetoothWidget> {
                   ),
                   onPressed: () {
                     connection != null
-                      ? context.navigateTo(WaveformWidget(connection: connection!))
-                      : showMessage(context, "Connection is not available");
+                        ? context
+                            .navigateTo(WaveformWidget(connection: connection!))
+                        : showMessage(context, "Connection is not available");
                   },
                 ),
               ],

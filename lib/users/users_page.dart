@@ -495,7 +495,7 @@ class UsersPage extends StatelessWidget {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      children: const [
                         Activity(12.0, 24.0, Colors.greenAccent, Icons.hiking, "12,000"),
                         Text("|", style: TextStyle(fontSize: 48, color: Colors.black26, fontWeight: FontWeight.w100), ),
                         Activity(12.0, 24.0, Colors.blueAccent, Icons.schedule, "11"),

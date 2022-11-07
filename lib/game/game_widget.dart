@@ -25,7 +25,7 @@ class GameState extends State<GameWidget> {
   Widget buildFutureGameOption(int offset) {
     return FutureBuilder(
         future: _databaseHelper.queryFirstValue(DatabaseHelper.bpmTable),
-        initialData: "Loading...",
+        initialData: "60",
         builder: (BuildContext context, AsyncSnapshot<String> object) {
           int parsedValue = int.parse(object.data!);
           String displayedOption = (parsedValue + offset).toString();
@@ -100,7 +100,8 @@ class GameState extends State<GameWidget> {
   Widget build(BuildContext context) {
     return Container(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
+        child: SingleChildScrollView(
+            child: Column(
           children: <Widget>[
             buildTitle(context),
             buildGame(context),
@@ -109,10 +110,7 @@ class GameState extends State<GameWidget> {
             ),
             Text(
               "Score: \n$consecutiveRights",
-              style: const TextStyle(
-                fontSize: 30,
-                color: Colors.red
-              ),
+              style: const TextStyle(fontSize: 30, color: Colors.red),
               textAlign: TextAlign.center,
             ),
             const SizedBox(
@@ -139,7 +137,7 @@ class GameState extends State<GameWidget> {
                   ),
                 )),
           ],
-        ));
+        )));
   }
 
   void _checkIfOptionIsCorrect(int offset) {

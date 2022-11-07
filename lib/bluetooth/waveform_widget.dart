@@ -5,6 +5,8 @@ import 'dart:typed_data';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:flutter_mobile_app/util/database.dart';
+import 'package:flutter_mobile_app/util/util_widgets.dart';
 
 class WaveformWidget extends StatefulWidget {
   const WaveformWidget({Key? key, required this.connection}) : super(key: key);
@@ -17,11 +19,20 @@ class WaveformWidget extends StatefulWidget {
 
 class _WaveformWidgetState extends State<WaveformWidget> {
   List<int> _buffer = List<int>.empty(growable: true);
+  final DatabaseHelper _databaseHelper = DatabaseHelper.instance;
 
   final Color waveColour = Colors.redAccent;
   final limitCount = 100;
   final dataPoints = <FlSpot>[];
+
+  final defaultTemperature = 35;
+  final defaultOxygen = 100;
+  final defaultBPM = 60;
+
   final rawSamplePoints = List<int>.empty(growable: true);
+  final rawTemperaturePoints = List<int>.empty(growable: true);
+  final rawOxygenPoints = List<int>.empty(growable: true);
+  final rawBPMPoints = List<int>.empty(growable: true);
 
   double xValue = 0;
   double step = 0.05;
@@ -33,6 +44,11 @@ class _WaveformWidgetState extends State<WaveformWidget> {
     super.initState();
 
     widget.connection.input!.listen(_onDataReceived);
+
+    rawTemperaturePoints.add(defaultTemperature);
+    rawOxygenPoints.add(defaultOxygen);
+    rawBPMPoints.add(defaultBPM);
+    _addStatDatabaseValues(defaultTemperature, defaultOxygen, defaultBPM);
 
     timer = Timer.periodic(const Duration(milliseconds: 70), (timer) {
       while (dataPoints.length > limitCount) {
@@ -58,48 +74,87 @@ class _WaveformWidgetState extends State<WaveformWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return dataPoints.isNotEmpty
-        ? Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'IR Value: ${dataPoints.last.y.toStringAsFixed(1)}',
-                style: TextStyle(
-                  color: waveColour,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              SizedBox(
-                width: 300,
-                height: 400,
-                child: LineChart(
-                  LineChartData(
-                    minY: dataPoints.map((value) => value.y).reduce(min),
-                    maxY: dataPoints.map((value) => value.y).reduce(max),
-                    minX: dataPoints.first.x,
-                    maxX: dataPoints.last.x,
-                    lineTouchData: LineTouchData(enabled: false),
-                    clipData: FlClipData.all(),
-                    gridData: FlGridData(
-                      show: true,
-                      drawVerticalLine: false,
-                    ),
-                    lineBarsData: [
-                      waveformLine(dataPoints),
-                    ],
-                    titlesData: FlTitlesData(
-                      show: false,
-                    ),
+    return ListView(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          height: 120,
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                roundedStatDisplay(
+                     const Color.fromARGB(255, 93, 171, 235), [
+                  Text(
+                    rawTemperaturePoints.last.toString(),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 32),
                   ),
-                ),
+                  const Text(
+                    '℃',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ]),
+                roundedStatDisplay(Colors.red, [
+                  Text(
+                    rawBPMPoints.last.toString(),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 32),
+                  ),
+                  const Text(
+                    'BPM',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ]),
+                roundedStatDisplay(
+                    const Color.fromARGB(255, 252, 186, 186), [
+                  Text(
+                    rawOxygenPoints.last.toString(),
+                    style: const TextStyle(fontSize: 32),
+                  ),
+                  const Text(
+                    '%',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ]),
+              ]),
+        ),
+        dataPoints.isNotEmpty
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  SizedBox(
+                    width: 300,
+                    height: 300,
+                    child: LineChart(
+                      LineChartData(
+                        minY: dataPoints.map((value) => value.y).reduce(min),
+                        maxY: dataPoints.map((value) => value.y).reduce(max),
+                        minX: dataPoints.first.x,
+                        maxX: dataPoints.last.x,
+                        lineTouchData: LineTouchData(enabled: false),
+                        clipData: FlClipData.all(),
+                        gridData: FlGridData(
+                          show: true,
+                          drawVerticalLine: false,
+                        ),
+                        lineBarsData: [
+                          waveformLine(dataPoints),
+                        ],
+                        titlesData: FlTitlesData(
+                          show: false,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               )
-            ],
-          )
-        : Container();
+            : Container()
+      ],
+    );
   }
 
   LineChartBarData waveformLine(List<FlSpot> points) {
@@ -132,7 +187,7 @@ class _WaveformWidgetState extends State<WaveformWidget> {
         }
         _buffer.removeRange(0, index + 1);
         String dataPacket = _parseDataReceived(dataPoint);
-        rawSamplePoints.add(_decodeDataPacket(dataPacket));
+        _decodeDataPacket(dataPacket);
       } else {
         break; // Must break from while true loop
       }
@@ -148,10 +203,31 @@ class _WaveformWidgetState extends State<WaveformWidget> {
 
   // Decodes various data packets from String to their integer values
   int _decodeDataPacket(String dataPacket) {
+    int sampledValue = num.tryParse(dataPacket.substring(1))!.toInt();
+
+    // Raw Signal Values
     if (dataPacket.startsWith("S")) {
-      int sampledValue = int.parse(dataPacket.substring(1));
-      return sampledValue;
+      rawSamplePoints.add(sampledValue);
     }
-    return -999999; // Shouldn't reach here!
+    // Heart Rate Data
+    else if (dataPacket.startsWith("H")) {
+      rawBPMPoints.add(sampledValue);
+    }
+    // Temperature Data
+    else if (dataPacket.startsWith("T")) {
+      rawTemperaturePoints.add(sampledValue);
+    }
+    // Oxygen Data
+    else if (dataPacket.startsWith("O")) {
+      rawOxygenPoints.add(sampledValue);
+    }
+    return sampledValue;
+  }
+
+  void _addStatDatabaseValues(int temp, int oxy, int bpm) {
+    int currentTime = DateTime.now().millisecondsSinceEpoch;
+    _databaseHelper.insert(DatabaseHelper.temperatureTable, TemperatureData(temp, currentTime).toMap());
+    _databaseHelper.insert(DatabaseHelper.oxygenTable, OxygenData(oxy, currentTime).toMap());
+    _databaseHelper.insert(DatabaseHelper.bpmTable, BpmData(bpm, currentTime).toMap());
   }
 }

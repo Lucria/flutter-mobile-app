@@ -67,17 +67,21 @@ Container firebaseUIButton(BuildContext context, String title, Function onTap) {
 }
 
 Widget roundedStatDisplay(Color color, List<Widget> childrenWidgets) {
-  return Container(
-    alignment: Alignment.center,
-    height: 100,
-    width: 100,
-    decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: color, width: 10),
-        borderRadius: BorderRadius.circular(75)),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: childrenWidgets,
+  return SingleChildScrollView(
+    child: Container(
+      alignment: Alignment.center,
+      height: 100,
+      width: 100,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: color, width: 10),
+          borderRadius: BorderRadius.circular(75)),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: childrenWidgets,
+        ),
+      ),
     ),
   );
 }

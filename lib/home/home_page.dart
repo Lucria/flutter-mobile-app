@@ -13,8 +13,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final DatabaseHelper _databaseHelper = DatabaseHelper.instance;
 
-  String test = "Test";
-
   Widget buildFutureStatDisplay(String table) {
     return FutureBuilder(
         future: _databaseHelper.queryFirstValue(table),

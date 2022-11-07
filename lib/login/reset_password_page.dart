@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -51,7 +52,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     firebaseUIButton(context, "Reset Password", () {
                       FirebaseAuth.instance
                           .sendPasswordResetEmail(email: _emailController.text)
-                          .then((value) => Navigator.of(context).pop());
+                          .then((value) => context.popRoute());
                     })
                   ],
                 ),

@@ -29,7 +29,6 @@ class PostPreviewTile extends StatelessWidget {
   }
 }
 
-// TODO pending deprecation
 class UserAvatar extends StatelessWidget {
   final Color avatarColor;
   final String username;

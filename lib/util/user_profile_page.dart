@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobile_app/data/app_data.dart';
 import 'package:flutter_mobile_app/posts/post_preview_widget.dart';
 
-// TODO pending deprecation
 class UserProfilePage extends StatelessWidget {
   final int userId;
   const UserProfilePage({

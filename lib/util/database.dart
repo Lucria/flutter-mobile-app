@@ -49,10 +49,26 @@ class BpmData {
   };
 }
 
+class SensorData {
+  int? value;
+  int? time;
+
+  SensorData(this.value, this.time);
+  SensorData.fromMap(Map result) {
+    value = result["value"];
+    time = result["time"];
+  }
+
+  Map<String, dynamic> toMap() => {
+    'value': value,
+    'time': time
+  };
+}
+
 class DatabaseHelper {
 
   static const _databaseName = "MyDatabase.db";
-  static const _databaseVersion = 2;
+  static const _databaseVersion = 4;
 
   static const temperatureTable = 'temperature';
   static const oxygenTable = 'oxygen';
@@ -74,8 +90,10 @@ class DatabaseHelper {
     String documentsDirectory = await getDatabasesPath();
     String path = join(documentsDirectory, _databaseName);
     return await openDatabase(path,
-        version: _databaseVersion,
-        onCreate: _onCreate);
+      version: _databaseVersion,
+      onCreate: _onCreate,
+      onUpgrade: _onUpgrade
+    );
   }
 
   // SQL code to create the database table
@@ -104,17 +122,29 @@ class DatabaseHelper {
     await db.execute('''
           CREATE TABLE $rawSensorTable (
             _id INTEGER PRIMARY KEY,
-            value INTEGER NOT NULL
+            value INTEGER NOT NULL,
+            time INTEGER NOT NULL
           );
     ''');
     int currentTime = DateTime.now().millisecondsSinceEpoch;
     await db.insert(temperatureTable, TemperatureData(35, currentTime).toMap());
     await db.insert(oxygenTable, OxygenData(100, currentTime).toMap());
     await db.insert(bpmTable, BpmData(60, currentTime).toMap());
-    currentTime = DateTime.now().millisecondsSinceEpoch;
-    await db.insert(temperatureTable, TemperatureData(33, currentTime).toMap());
-    await db.insert(oxygenTable, OxygenData(98, currentTime).toMap());
-    await db.insert(bpmTable, BpmData(68, currentTime).toMap());
+  }
+
+  Future<void> _onUpgrade(Database db, int previousVersion, int newVersion) async {
+    _database = db;
+    await dropTable();
+    await _onCreate(db, newVersion);
+  }
+
+  Future<void> dropTable() async {
+    await _database?.transaction((txn) async {
+      await txn.execute('DROP TABLE IF EXISTS $rawSensorTable');
+      await txn.execute('DROP TABLE IF EXISTS $temperatureTable');
+      await txn.execute('DROP TABLE IF EXISTS $oxygenTable');
+      await txn.execute('DROP TABLE IF EXISTS $bpmTable');
+    });
   }
 
   Future<int> insert(String table, Map<String, dynamic> data) async {
@@ -127,6 +157,18 @@ class DatabaseHelper {
     return await db.query(table);
   }
 
+  Future<List<BpmData>> queryAllBpmData() async {
+    Database db = await instance.database;
+    var results = await db.query(bpmTable, limit: 300, orderBy: "_id DESC");
+    return results.map((result) => BpmData.fromMap(result)).toList();
+  }
+
+  Future<List<SensorData>> queryAllSensorData() async {
+    Database db = await instance.database;
+    var results = await db.query(rawSensorTable, limit: 300, orderBy: "_id DESC");
+    return results.map((result) => SensorData.fromMap(result)).toList();
+  }
+
   Future<String> queryFirstValue(String table) async {
     Database db = await instance.database;
     var results = await db.query(table, limit: 1, orderBy: "_id DESC");
@@ -137,5 +179,11 @@ class DatabaseHelper {
       return OxygenData.fromMap(results.first).value.toString();
     }
     return BpmData.fromMap(results.first).value.toString();
+  }
+
+  Future<String> queryTime() async {
+    Database db = await instance.database;
+    var results = await db.query(temperatureTable, limit: 1, orderBy: "_id DESC");
+    return DateTime.fromMillisecondsSinceEpoch(TemperatureData.fromMap(results.first).time!).toIso8601String();
   }
 }

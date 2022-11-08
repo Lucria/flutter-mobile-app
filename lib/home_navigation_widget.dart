@@ -13,7 +13,7 @@ class HomeTabNavigationWidget extends StatelessWidget {
     return AutoTabsScaffold(
       appBarBuilder: (_, tabsRouter) => AppBar(
         backgroundColor: Colors.red[300],
-        title: const Text('Cell-O2'),
+        title: buildTitle(),
         centerTitle: true,
         leading: const AutoLeadingButton(),
         actions: [

@@ -25,9 +25,10 @@ class AppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'Cell-O2',
+      title: 'Cell-O\u2082',
       routerDelegate: _appRouter.delegate(),
       routeInformationParser: _appRouter.defaultRouteParser(),
+      theme: ThemeData(fontFamily: 'PTSansNarrow'),
     );
   }
 }

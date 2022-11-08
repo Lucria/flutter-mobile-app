@@ -33,3 +33,9 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+  fonts:
+    - family: PTSansNarrow
+      fonts:
+        - asset: fonts/PTSansNarrow-Regular.ttf
+        - asset: fonts/PTSansNarrow-Bold.ttf
+          weight: 700

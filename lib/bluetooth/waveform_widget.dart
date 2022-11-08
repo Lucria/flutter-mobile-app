@@ -204,6 +204,7 @@ class _WaveformWidgetState extends State<WaveformWidget> {
   // Decodes various data packets from String to their integer values
   int _decodeDataPacket(String dataPacket) {
     int sampledValue = num.tryParse(dataPacket.substring(1))!.toInt();
+    int currentTime = DateTime.now().millisecondsSinceEpoch;
 
     // Raw Signal Values
     if (dataPacket.startsWith("S")) {
@@ -212,14 +213,17 @@ class _WaveformWidgetState extends State<WaveformWidget> {
     // Heart Rate Data
     else if (dataPacket.startsWith("H")) {
       rawBPMPoints.add(sampledValue);
+      _databaseHelper.insert(DatabaseHelper.bpmTable, BpmData(sampledValue, currentTime).toMap());
     }
     // Temperature Data
     else if (dataPacket.startsWith("T")) {
       rawTemperaturePoints.add(sampledValue);
+      _databaseHelper.insert(DatabaseHelper.temperatureTable, TemperatureData(sampledValue, currentTime).toMap());
     }
     // Oxygen Data
     else if (dataPacket.startsWith("O")) {
       rawOxygenPoints.add(sampledValue);
+      _databaseHelper.insert(DatabaseHelper.oxygenTable, OxygenData(sampledValue, currentTime).toMap());
     }
     return sampledValue;
   }

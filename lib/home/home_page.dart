@@ -1,9 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobile_app/posts/posts_list_widget.dart';
+import 'package:flutter_mobile_app/util/database.dart';
 import 'package:flutter_mobile_app/util/util_widgets.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final DatabaseHelper _databaseHelper = DatabaseHelper.instance;
+
+  Widget buildFutureStatDisplay(String table) {
+    return FutureBuilder(
+        future: _databaseHelper.queryFirstValue(table),
+        initialData: "Loading...",
+        builder: (BuildContext context, AsyncSnapshot<String> object) {
+          return Text(
+            object.data!,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,66 +44,34 @@ class HomePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     roundedStatDisplay(
-                        const Color.fromARGB(255, 93, 171, 235), const [
-                      Text(
-                        '38', // TODO Temperature Display
-                        textAlign: TextAlign.center,
-
-                        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
-                      ),
-                      Text(
+                        const Color.fromARGB(255, 93, 171, 235), [
+                      buildFutureStatDisplay(DatabaseHelper.temperatureTable),
+                      const Text(
                         '℃',
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w300),
                       ),
                     ]),
-                    roundedStatDisplay(Colors.red, const [
-                      Text(
-                        '120',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
-                      ),
-                      Text(
+                    roundedStatDisplay(Colors.red, [
+                      buildFutureStatDisplay(DatabaseHelper.bpmTable),
+                      const Text(
                         'BPM',
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w300),
                       ),
                     ]),
                     roundedStatDisplay(
-                        const Color.fromARGB(255, 252, 186, 186), const [
-                      Text(
-                        '35', // TODO O2 Display
-                        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
-                      ),
-                      Text(
+                        const Color.fromARGB(255, 252, 186, 186), [
+                      buildFutureStatDisplay(DatabaseHelper.oxygenTable),
+                      const Text(
                         '%',
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w300),
                       ),
                     ]),
                   ]),
             ),
-            // TODO add graph of waveform over here!
-            // Container(
-            //   padding: const EdgeInsets.all(10),
-            //   height: 54,
-            //   child: const Text(
-            //     "Live Tracker",
-            //     textAlign: TextAlign.center,
-            //     style: TextStyle(color: Colors.red, fontSize: 25),
-            //   ),
-            // ),
-            // Container(
-            //   padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-            //   alignment: Alignment.center,
-            //   height: 250,
-            //   width: 400,
-            //   decoration: BoxDecoration(
-            //       color: Colors.yellow,
-            //       border: Border.all(color: Colors.red, width: 5),
-            //       borderRadius: BorderRadius.circular(20), //圆角图片（圆形图片）
-            //       image: const DecorationImage(
-            //           image: NetworkImage(
-            //               "https://wx1.sinaimg.cn/large/007PfBoygy1h7az3d5x0uj30sd0cr74t.jpg"),
-            //           fit: BoxFit.cover)),
-            // ),
+            // TODO add information of user here
             paddedHeader("Healthy Tips", Colors.red),
             const PostsListWidget()
           ]),

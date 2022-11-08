@@ -23,6 +23,7 @@ class Result {
   }
 }
 
+// Deprecated!
 class Game {
   static const int min = 50;
   static const int max = 180;

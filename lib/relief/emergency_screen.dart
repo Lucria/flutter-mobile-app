@@ -25,8 +25,9 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
   final countdown = 60 * 30;
   final quoteDuration = 10;
 
-  @override
   _EmergencyScreenState();
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(

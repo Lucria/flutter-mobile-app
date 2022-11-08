@@ -1,9 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobile_app/home_navigation_widget.dart';
-
-import '../util/util_widgets.dart';
+import 'package:flutter_mobile_app/routes/router.gr.dart';
+import 'package:flutter_mobile_app/util/util_widgets.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _passwordController = TextEditingController();
-  final _confirmpasswordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   final _emailController = TextEditingController();
   final _firstnameController = TextEditingController();
   final _lastnameController = TextEditingController();
@@ -25,7 +25,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
-    _confirmpasswordController.dispose();
+    _confirmPasswordController.dispose();
     _firstnameController.dispose();
     _lastnameController.dispose();
     _ageController.dispose();
@@ -63,7 +63,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   bool passwordConfirmed() {
     if (_passwordController.text.trim() ==
-        _confirmpasswordController.text.trim()) {
+        _confirmPasswordController.text.trim()) {
       return true;
     } else {
       return false;
@@ -122,7 +122,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 20,
                     ),
                     reusableTextField("Confirm Password", Icons.lock_outlined, true,
-                        _passwordController),
+                        _confirmPasswordController),
                     const SizedBox(
                       height: 20,
                     ),
@@ -134,8 +134,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       )
                           .then((value) {
                         showMessage(context, "Created New Account");
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => const HomeTabNavigationWidget()));
+                        context.navigateTo(const HomeTabNavigationWidget());
                       }).onError((error, stackTrace) {
                         showMessage(context, "Error ${error.toString()}");
                       });

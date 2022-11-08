@@ -206,6 +206,7 @@ class _WaveformWidgetState extends State<WaveformWidget> {
     // Raw Signal Values
     if (dataPacket.startsWith("S")) {
       rawSamplePoints.add(sampledValue);
+      _databaseHelper.insert(DatabaseHelper.rawSensorTable, SensorData(sampledValue, currentTime).toMap());
     }
     // Heart Rate Data
     else if (dataPacket.startsWith("H")) {

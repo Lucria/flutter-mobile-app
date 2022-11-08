@@ -339,12 +339,12 @@ class _BluetoothWidgetState extends State<BluetoothWidget> {
           connection = _connection;
           setState(() => _connected = true);
 
-          // connection!.input!.listen(null).onDone(() {
-          //   if (isDisconnecting) {
-          //     showMessage('Disconnecting!');
-          //   }
-          //   setState(() {});
-          // });
+          connectionSubscription?.onDone(() {
+            if (isDisconnecting) {
+              showMessage(context, 'Device is disconnected!');
+            }
+            setState(() {});
+          });
         }).catchError((error) {
           // TODO attempt retry by disconnecting and reconnecting
           showMessage(context, 'Cannot connect, exception: $error');

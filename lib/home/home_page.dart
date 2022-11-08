@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobile_app/posts/posts_list_widget.dart';
 import 'package:flutter_mobile_app/util/database.dart';
 import 'package:flutter_mobile_app/util/util_widgets.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,13 +17,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final DatabaseHelper _databaseHelper = DatabaseHelper.instance;
   late Timer timer;
+  late Future<String> recordedDate;
   late Future<String> temperatureValue;
   late Future<String> oxygenValue;
   late Future<String> bpmValue;
   var dataPoints = <FlSpot>[const FlSpot(0, 0)];
+  var rawSensorDataPoints = <FlSpot>[const FlSpot(0, 0)];
   List<Color> gradientColors = [
-    const Color(0xff22b2e1),
-    const Color(0xff02d39a),
+    const Color(0xffdb7de6),
+    const Color(0xfff33385),
   ];
 
   @override
@@ -32,10 +35,19 @@ class _HomePageState extends State<HomePage> {
         _databaseHelper.queryFirstValue(DatabaseHelper.temperatureTable);
     oxygenValue = _databaseHelper.queryFirstValue(DatabaseHelper.oxygenTable);
     bpmValue = _databaseHelper.queryFirstValue(DatabaseHelper.bpmTable);
+    recordedDate = _databaseHelper.queryTime();
 
+    _databaseHelper.queryAllBpmData().then((bpmData) {
+      if (bpmData.isNotEmpty) {
+        dataPoints = bpmData
+            .map(
+                (data) => FlSpot(data.time!.toDouble(), data.value!.toDouble()))
+            .toList();
+      }
+    });
     _databaseHelper.queryAllSensorData().then((sensorData) {
       if (sensorData.isNotEmpty) {
-        dataPoints = sensorData
+        rawSensorDataPoints = sensorData
             .map(
                 (data) => FlSpot(data.time!.toDouble(), data.value!.toDouble()))
             .toList();
@@ -47,9 +59,18 @@ class _HomePageState extends State<HomePage> {
           _databaseHelper.queryFirstValue(DatabaseHelper.temperatureTable);
       oxygenValue = _databaseHelper.queryFirstValue(DatabaseHelper.oxygenTable);
       bpmValue = _databaseHelper.queryFirstValue(DatabaseHelper.bpmTable);
-      _databaseHelper.queryAllSensorData().then((sensorData) {
+      recordedDate = _databaseHelper.queryTime();
+      _databaseHelper.queryAllBpmData().then((sensorData) {
         if (sensorData.isNotEmpty) {
           dataPoints = sensorData
+              .map((data) =>
+                  FlSpot(data.time!.toDouble(), data.value!.toDouble()))
+              .toList();
+        }
+      });
+      _databaseHelper.queryAllSensorData().then((sensorData) {
+        if (sensorData.isNotEmpty) {
+          rawSensorDataPoints = sensorData
               .map((data) =>
                   FlSpot(data.time!.toDouble(), data.value!.toDouble()))
               .toList();
@@ -88,13 +109,63 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
+  Widget buildFutureDateDisplay() {
+    return FutureBuilder(
+      future: recordedDate,
+      initialData: DateTime.now().toIso8601String(),
+      builder: (BuildContext context, AsyncSnapshot<String> object) {
+        final formattedDate = DateFormat('d MMMM y').add_jms().format(DateTime.parse(object.data!));
+        return Card(
+          elevation: 4,
+          margin: const EdgeInsets.all(8.0),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 8.0,
+            ),
+            child: Text(
+              "Last Recorded: $formattedDate",
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget buildRawSensorChart() {
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(18),
+        ),
+        color: Colors.white,
+      ),
+      child: SizedBox(
+        width: 300,
+        height: 300,
+        child: Padding(
+          padding: const EdgeInsets.only(
+            right: 18,
+            left: 0,
+            top: 24,
+            bottom: 12,
+          ),
+          child: LineChart(
+            _rawHistory(),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget buildChart() {
     return DecoratedBox(
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(
           Radius.circular(18),
         ),
-        color: Color(0xff99a0a7),
+        color: Colors.white,
       ),
       child: SizedBox(
         width: 300,
@@ -143,6 +214,7 @@ class _HomePageState extends State<HomePage> {
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
+            reservedSize: 40,
             getTitlesWidget: bottomTitleWidgets,
           ),
         ),
@@ -180,6 +252,71 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  LineChartData _rawHistory() {
+    return LineChartData(
+      gridData: FlGridData(
+        show: true,
+        drawVerticalLine: true,
+        getDrawingHorizontalLine: (value) {
+          return FlLine(
+            color: const Color(0xff37434d),
+            strokeWidth: 1,
+          );
+        },
+        getDrawingVerticalLine: (value) {
+          return FlLine(
+            color: const Color(0xff37434d),
+            strokeWidth: 1,
+          );
+        },
+      ),
+      titlesData: FlTitlesData(
+        show: true,
+        rightTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        topTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: false,
+          ),
+        ),
+      ),
+      borderData: FlBorderData(
+        show: true,
+        border: Border.all(color: const Color(0xff37434d)),
+      ),
+      minX: rawSensorDataPoints.first.x,
+      maxX: rawSensorDataPoints.last.x,
+      minY: rawSensorDataPoints.map((value) => value.y).reduce(min),
+      maxY: rawSensorDataPoints.map((value) => value.y).reduce(max),
+      lineBarsData: [
+        LineChartBarData(
+          spots: rawSensorDataPoints,
+          isCurved: true,
+          gradient: LinearGradient(
+            colors: gradientColors,
+          ),
+          barWidth: 2,
+          isStrokeCapRound: true,
+          dotData: FlDotData(
+            show: false,
+          ),
+          belowBarData: BarAreaData(
+            show: true,
+            gradient: LinearGradient(
+              colors: gradientColors
+                  .map((color) => color.withOpacity(0.3))
+                  .toList(),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget bottomTitleWidgets(double timestamp, TitleMeta meta) {
     const style = TextStyle(
       color: Color(0xff68737d),
@@ -187,20 +324,18 @@ class _HomePageState extends State<HomePage> {
       fontSize: 16,
     );
     String text;
-    int day = DateTime
-        .fromMillisecondsSinceEpoch(timestamp.toInt())
-        .weekday;
+    int day = DateTime.fromMillisecondsSinceEpoch(timestamp.toInt()).weekday;
 
     switch (day) {
-      case 0:
-        text = 'Mon';
-        break;
-      case 1:
-        text = 'Tues';
-        break;
-      case 2:
-        text = 'Wed';
-        break;
+      // case 0:
+      //   text = 'Mon';
+      //   break;
+      // case 1:
+      //   text = 'Tues';
+      //   break;
+      // case 2:
+      //   text = 'Wed';
+      //   break;
       case 3:
         text = 'Thurs';
         break;
@@ -219,10 +354,7 @@ class _HomePageState extends State<HomePage> {
 
     return SideTitleWidget(
       axisSide: meta.axisSide,
-      child: Text(
-        text,
-        style: style
-      ),
+      child: Text(text, style: style),
     );
   }
 
@@ -271,8 +403,28 @@ class _HomePageState extends State<HomePage> {
                     ]),
                   ]),
             ),
+            buildFutureDateDisplay(),
+            const Text(
+              'BPM',
+              style: TextStyle(
+                color: Colors.purple,
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+              ),
+            ),
             buildChart(),
-            paddedHeader("Healthy Tips", Colors.red),
+            const SizedBox(height: 10),
+            const Text(
+              'PPG Signal',
+              style: TextStyle(
+                color: Colors.purple,
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+              ),
+            ),
+            buildRawSensorChart(),
+            const SizedBox(height: 20),
+            paddedHeader("Healthy Tips", Colors.blueAccent),
             const PostsListWidget()
           ]),
     ]);

@@ -80,8 +80,7 @@ class _WaveformWidgetState extends State<WaveformWidget> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                roundedStatDisplay(
-                     const Color.fromARGB(255, 93, 171, 235), [
+                roundedStatDisplay(const Color.fromARGB(255, 93, 171, 235), [
                   Text(
                     rawTemperaturePoints.last.toString(),
                     textAlign: TextAlign.center,
@@ -103,8 +102,7 @@ class _WaveformWidgetState extends State<WaveformWidget> {
                     style: TextStyle(fontSize: 15),
                   ),
                 ]),
-                roundedStatDisplay(
-                    const Color.fromARGB(255, 252, 186, 186), [
+                roundedStatDisplay(const Color.fromARGB(255, 252, 186, 186), [
                   Text(
                     rawOxygenPoints.last.toString(),
                     style: const TextStyle(fontSize: 32),
@@ -116,37 +114,53 @@ class _WaveformWidgetState extends State<WaveformWidget> {
                 ]),
               ]),
         ),
+        paddedHeader("Live PPG Signal", Colors.purple, verticalPadding: 5),
         dataPoints.isNotEmpty
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(
-                    height: 12,
+                    height: 5,
                   ),
                   SizedBox(
-                    width: 300,
-                    height: 300,
-                    child: LineChart(
-                      LineChartData(
-                        minY: dataPoints.map((value) => value.y).reduce(min),
-                        maxY: dataPoints.map((value) => value.y).reduce(max),
-                        minX: dataPoints.first.x,
-                        maxX: dataPoints.last.x,
-                        lineTouchData: LineTouchData(enabled: false),
-                        clipData: FlClipData.all(),
-                        gridData: FlGridData(
-                          show: true,
-                          drawVerticalLine: false,
+                      width: 370,
+                      height: 300,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          right: 18,
+                          left: 0,
+                          top: 0,
+                          bottom: 0,
                         ),
-                        lineBarsData: [
-                          waveformLine(dataPoints),
-                        ],
-                        titlesData: FlTitlesData(
-                          show: false,
+                        child: LineChart(
+                          LineChartData(
+                            minY:
+                                dataPoints.map((value) => value.y).reduce(min),
+                            maxY:
+                                dataPoints.map((value) => value.y).reduce(max),
+                            minX: dataPoints.first.x,
+                            maxX: dataPoints.last.x,
+                            lineTouchData: LineTouchData(enabled: false),
+                            clipData: FlClipData.all(),
+                            gridData: FlGridData(
+                              show: true,
+                              drawVerticalLine: false,
+                            ),
+                            lineBarsData: [
+                              waveformLine(dataPoints),
+                            ],
+                            titlesData: FlTitlesData(
+                              show: true,
+                              rightTitles: AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              topTitles: AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  )
+                      ))
                 ],
               )
             : Container()
@@ -206,30 +220,37 @@ class _WaveformWidgetState extends State<WaveformWidget> {
     // Raw Signal Values
     if (dataPacket.startsWith("S")) {
       rawSamplePoints.add(sampledValue);
-      _databaseHelper.insert(DatabaseHelper.rawSensorTable, SensorData(sampledValue, currentTime).toMap());
+      _databaseHelper.insert(DatabaseHelper.rawSensorTable,
+          SensorData(sampledValue, currentTime).toMap());
     }
     // Heart Rate Data
     else if (dataPacket.startsWith("H")) {
       rawBPMPoints.add(sampledValue);
-      _databaseHelper.insert(DatabaseHelper.bpmTable, BpmData(sampledValue, currentTime).toMap());
+      _databaseHelper.insert(
+          DatabaseHelper.bpmTable, BpmData(sampledValue, currentTime).toMap());
     }
     // Temperature Data
     else if (dataPacket.startsWith("T")) {
       rawTemperaturePoints.add(sampledValue);
-      _databaseHelper.insert(DatabaseHelper.temperatureTable, TemperatureData(sampledValue, currentTime).toMap());
+      _databaseHelper.insert(DatabaseHelper.temperatureTable,
+          TemperatureData(sampledValue, currentTime).toMap());
     }
     // Oxygen Data
     else if (dataPacket.startsWith("O")) {
       rawOxygenPoints.add(sampledValue);
-      _databaseHelper.insert(DatabaseHelper.oxygenTable, OxygenData(sampledValue, currentTime).toMap());
+      _databaseHelper.insert(DatabaseHelper.oxygenTable,
+          OxygenData(sampledValue, currentTime).toMap());
     }
     return sampledValue;
   }
 
   void _addStatDatabaseValues(int temp, int oxy, int bpm) {
     int currentTime = DateTime.now().millisecondsSinceEpoch;
-    _databaseHelper.insert(DatabaseHelper.temperatureTable, TemperatureData(temp, currentTime).toMap());
-    _databaseHelper.insert(DatabaseHelper.oxygenTable, OxygenData(oxy, currentTime).toMap());
-    _databaseHelper.insert(DatabaseHelper.bpmTable, BpmData(bpm, currentTime).toMap());
+    _databaseHelper.insert(DatabaseHelper.temperatureTable,
+        TemperatureData(temp, currentTime).toMap());
+    _databaseHelper.insert(
+        DatabaseHelper.oxygenTable, OxygenData(oxy, currentTime).toMap());
+    _databaseHelper.insert(
+        DatabaseHelper.bpmTable, BpmData(bpm, currentTime).toMap());
   }
 }

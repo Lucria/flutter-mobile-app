@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-Image logoWidget(String imageName) {
-  return Image.asset(
-    imageName,
-    fit: BoxFit.fitWidth,
-    width: 100,
-    height: 100,
-    color: Colors.white,
+Widget buildTitle() {
+  return const Text(
+    'Cell-O\u2082',
+    style: TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 30
+    ),
   );
 }
 
@@ -18,15 +18,16 @@ TextField reusableTextField(String text, IconData icon, bool isPasswordType,
     enableSuggestions: !isPasswordType,
     autocorrect: !isPasswordType,
     cursorColor: Colors.black,
-    style: TextStyle(color: const Color.fromARGB(255, 3, 24, 41).withOpacity(0.9)),
+    style:
+        TextStyle(color: const Color.fromARGB(255, 3, 24, 41).withOpacity(0.9)),
     decoration: InputDecoration(
       prefixIcon: Icon(
         icon,
         color: const Color.fromARGB(255, 3, 24, 41),
       ),
       labelText: text,
-      labelStyle:
-      TextStyle(color: const Color.fromARGB(255, 3, 24, 41).withOpacity(0.9)),
+      labelStyle: TextStyle(
+          color: const Color.fromARGB(255, 3, 24, 41).withOpacity(0.9)),
       filled: true,
       floatingLabelBehavior: FloatingLabelBehavior.never,
       fillColor: const Color.fromARGB(255, 124, 197, 241).withOpacity(0.3),
@@ -86,14 +87,14 @@ Widget roundedStatDisplay(Color color, List<Widget> childrenWidgets) {
   );
 }
 
-Widget paddedHeader(String text, Color color) {
+Widget paddedHeader(String text, Color color, {double verticalPadding = 10}) {
   return Container(
-    padding: const EdgeInsets.symmetric(vertical: 10),
+    padding: EdgeInsets.symmetric(vertical: verticalPadding),
     alignment: Alignment.center,
     child: Text(
       text,
       textAlign: TextAlign.center,
-      style: TextStyle(color: color, fontSize: 25),
+      style: TextStyle(color: color, fontSize: 35, fontWeight: FontWeight.bold),
     ),
   );
 }
@@ -106,9 +107,8 @@ Widget pictureCard(String imageLink) {
     width: 400,
     decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        image: DecorationImage(
-            image: NetworkImage(imageLink),
-            fit: BoxFit.cover)),
+        image:
+            DecorationImage(image: NetworkImage(imageLink), fit: BoxFit.cover)),
   );
 }
 
@@ -124,21 +124,19 @@ Widget postTextContent(String title, String text) {
           child: Text(
             title,
             style: const TextStyle(
-              fontSize: 32,
-            ),
+                fontSize: 32, color: Colors.blue, fontWeight: FontWeight.bold),
           ),
         ),
         Text(text,
-            style: const TextStyle(fontSize: 20),
-            textAlign: TextAlign.justify
-        ),
+            style: const TextStyle(fontSize: 20), textAlign: TextAlign.justify),
       ],
     ),
   );
 }
 
 // Helper method to show SnackBar
-Future showMessage(BuildContext context, String message, {int duration = 3}) async {
+Future showMessage(BuildContext context, String message,
+    {int duration = 3}) async {
   await Future.delayed(const Duration(milliseconds: 100));
   final scaffold = ScaffoldMessenger.of(context);
   scaffold.showSnackBar(

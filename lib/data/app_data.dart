@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 List<Chunk> post1Chunks = [
   Chunk(
       "Resting Heart Rate",
-      "This is the number of times your heart beats in a minute when you’re not active and your heart isn’t having to work hard to pump blood through your body.",
+      "This is the number of times your heart beats in a minute when you’re not active.",
       "https://img.webmd.com/dtmcms/live/webmd/consumer_assets/site_images/articles/health_tools/what_to_know_about_your_heart_rate_slideshow/1800ss_getty_rf_woman_reading_book.jpg?resize=652px:*&output-quality=75"),
   Chunk(
       "A Healthy Resting Heart Rate",
@@ -18,7 +18,7 @@ List<Chunk> post1Chunks = [
 List<Chunk> post2Chunks = [
   Chunk(
       "Eat a healthy diet",
-      "Eat a combination of different foods, including fruit, vegetables, legumes, nuts and whole grains. Adults should eat at least five portions (400g) of fruit and vegetables per day. You can improve your intake of fruits and vegetables by always including veggies in your meal; eating fresh fruit and vegetables as snacks; eating a variety of fruits and vegetables; and eating them in season. By eating healthy, you will reduce your risk of malnutrition and noncommunicable diseases (NCDs) such as diabetes, heart disease, stroke and cancer.",
+      "Eat a combination of different foods, including fruit, vegetables, legumes, nuts and whole grains. Adults should eat at least five portions (400g) of fruit and vegetables per day. You can improve your intake of fruits and vegetables by always including veggies in your meal; eating fresh fruit and vegetables as snacks; eating a variety of fruits and vegetables; and eating them in season. By eating healthy, you will reduce your risk of malnutrition and noncommunicable diseases such as diabetes, heart disease, stroke and cancer.",
       "https://www.who.int/images/default-source/wpro/countries/philippines/feature-stories/1-20190529-091438-lr.tmb-1366v.jpg?sfvrsn=9ba890c9_2"),
   Chunk(
       "Consume less salt and sugar",
@@ -26,18 +26,18 @@ List<Chunk> post2Chunks = [
       "https://www.who.int/images/default-source/wpro/countries/philippines/feature-stories/2-who-056764-orig.tmb-1366v.jpg?sfvrsn=c20a162e_2"),
   Chunk(
       "Reduce intake of harmful fats",
-      "Fats consumed should be less than 30% of your total energy intake. This will help prevent unhealthy weight gain and NCDs. There are different types of fats, but unsaturated fats are preferable over saturated fats and trans-fats. WHO recommends reducing saturated fats to less than 10% of total energy intake; reducing trans-fats to less than 1% of total energy intake; and replacing both saturated fats and trans-fats to unsaturated fats",
+      "Fats consumed should be less than 30% of your total energy intake. This will help prevent unhealthy weight gain and diseases. There are different types of fats, but unsaturated fats are preferable over saturated fats and trans-fats. WHO recommends reducing saturated fats to less than 10% of total energy intake; reducing trans-fats to less than 1% of total energy intake; and replacing both saturated fats and trans-fats to unsaturated fats",
       "https://www.who.int/images/default-source/wpro/countries/philippines/feature-stories/3-who-056149-img.tmb-1366v.jpg?sfvrsn=c0dc2291_2"),
   Chunk(
       "Avoid harmful use of alcohol",
-      "There is no safe level for drinking alcohol. Consuming alcohol can lead to health problems such as mental and behavioural disorders, including alcohol dependence, major NCDs such as liver cirrhosis, some cancers and heart diseases, as well as injuries resulting from violence and road clashes and collisions.",
+      "There is no safe level for drinking alcohol. Consuming alcohol can lead to health problems such as mental and behavioural disorders, including alcohol dependence, major diseases such as liver cirrhosis, some cancers and heart diseases, as well as injuries resulting from violence and road clashes and collisions.",
       "https://www.who.int/images/default-source/wpro/countries/philippines/feature-stories/4-who-056030-img.tmb-1366v.jpg?sfvrsn=227d74e_2"),
 ];
 
 List<Chunk> post3Chunks = [
   Chunk(
       "Don’t smoke",
-      "Smoking tobacco causes NCDs such as lung disease, heart disease and stroke. Tobacco kills not only the direct smokers but even non-smokers through second-hand exposure. Currently, there are around 15.9 million Filipino adults who smoke tobacco but 7 in 10 smokers are interested or plan to quit.",
+      "Smoking tobacco causes diseases such as lung disease, heart disease and stroke. Tobacco kills not only the direct smokers but even non-smokers through second-hand exposure. Currently, there are around 15.9 million Filipino adults who smoke tobacco but 7 in 10 smokers are interested or plan to quit.",
       "https://www.who.int/images/default-source/wpro/countries/philippines/feature-stories/5-f9-05052016-ph-03850-lr.tmb-1366v.jpg?sfvrsn=835b05bf_2"),
 ];
 
@@ -61,7 +61,7 @@ List<Post> posts = [
       Colors.amberAccent,
       'What is Resting Heart Rate?',
       1,
-      "This is the number of times your heart beats in a minute when you’re not active and your heart isn’t having to work hard to pump blood through your body.",
+      "This is the number of times your heart beats in a minute when you’re not active.",
       "https://img.webmd.com/dtmcms/live/webmd/consumer_assets/site_images/articles/health_tools/what_to_know_about_your_heart_rate_slideshow/1800ss_getty_rf_woman_reading_book.jpg?resize=652px:*&output-quality=75",
       post1Chunks),
   Post(
@@ -75,14 +75,14 @@ List<Post> posts = [
       Colors.pinkAccent,
       'Avoid Smoking!',
       3,
-      "Smoking tobacco causes NCDs such as lung disease, heart disease and stroke.",
+      "Smoking tobacco causes diseases such as lung disease, heart disease and stroke.",
       "https://www.who.int/images/default-source/wpro/countries/philippines/feature-stories/5-f9-05052016-ph-03850-lr.tmb-1366v.jpg?sfvrsn=835b05bf_2",
       post3Chunks),
   Post(
       Colors.teal[300]!,
       'Keep Your Body Active!',
       4,
-      "Physical activity is defined as any bodily movement produced by skeletal muscles that requires energy expenditure. Any physical activity will do to maintain a healthy body!",
+      "Physical activity is defined as any bodily movement produced by skeletal muscles that requires energy expenditure. Any physical activity will help to maintain a healthy body!",
       "https://www.who.int/images/default-source/wpro/countries/philippines/feature-stories/6-f2-300032016-ph-06573-lr.tmb-1366v.jpg?sfvrsn=f4bc39b4_2",
       post4Chunks),
 ];

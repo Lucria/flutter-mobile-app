@@ -157,6 +157,12 @@ class DatabaseHelper {
     return await db.query(table);
   }
 
+  Future<List<BpmData>> queryAllBpmData() async {
+    Database db = await instance.database;
+    var results = await db.query(bpmTable, limit: 300, orderBy: "_id DESC");
+    return results.map((result) => BpmData.fromMap(result)).toList();
+  }
+
   Future<List<SensorData>> queryAllSensorData() async {
     Database db = await instance.database;
     var results = await db.query(rawSensorTable, limit: 300, orderBy: "_id DESC");
@@ -173,5 +179,11 @@ class DatabaseHelper {
       return OxygenData.fromMap(results.first).value.toString();
     }
     return BpmData.fromMap(results.first).value.toString();
+  }
+
+  Future<String> queryTime() async {
+    Database db = await instance.database;
+    var results = await db.query(temperatureTable, limit: 1, orderBy: "_id DESC");
+    return DateTime.fromMillisecondsSinceEpoch(TemperatureData.fromMap(results.first).time!).toIso8601String();
   }
 }

@@ -1,17 +1,14 @@
 import 'dart:async';
 import 'dart:math';
-import 'dart:typed_data';
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter_mobile_app/util/database.dart';
 import 'package:flutter_mobile_app/util/util_widgets.dart';
 
 class WaveformWidget extends StatefulWidget {
   const WaveformWidget({Key? key, required this.connection}) : super(key: key);
 
-  final BluetoothConnection connection;
+  final StreamSubscription connection;
 
   @override
   State<StatefulWidget> createState() => _WaveformWidgetState();
@@ -43,7 +40,7 @@ class _WaveformWidgetState extends State<WaveformWidget> {
   void initState() {
     super.initState();
 
-    widget.connection.input!.listen(_onDataReceived);
+    widget.connection.onData(_onDataReceived);
 
     rawTemperaturePoints.add(defaultTemperature);
     rawOxygenPoints.add(defaultOxygen);
@@ -172,7 +169,7 @@ class _WaveformWidgetState extends State<WaveformWidget> {
     );
   }
 
-  void _onDataReceived(Uint8List data) {
+  void _onDataReceived(data) {
     // Allocate buffer for received ASCII data
     _buffer += data;
 

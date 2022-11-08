@@ -11,10 +11,11 @@
 // ignore_for_file: type=lint
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'dart:async' as _i19;
+
 import 'package:auto_route/auto_route.dart' as _i16;
 import 'package:auto_route/empty_router_widgets.dart' as _i1;
 import 'package:flutter/material.dart' as _i17;
-import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart' as _i19;
 
 import '../activity/activity_page.dart' as _i13;
 import '../bluetooth/bluetooth_widget.dart' as _i14;
@@ -496,7 +497,7 @@ class BluetoothWidget extends _i16.PageRouteInfo<void> {
 class WaveformWidget extends _i16.PageRouteInfo<WaveformWidgetArgs> {
   WaveformWidget({
     _i17.Key? key,
-    required _i19.BluetoothConnection connection,
+    required _i19.StreamSubscription<dynamic> connection,
   }) : super(
           WaveformWidget.name,
           path: 'waveform',
@@ -517,7 +518,7 @@ class WaveformWidgetArgs {
 
   final _i17.Key? key;
 
-  final _i19.BluetoothConnection connection;
+  final _i19.StreamSubscription<dynamic> connection;
 
   @override
   String toString() {

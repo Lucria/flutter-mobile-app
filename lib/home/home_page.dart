@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobile_app/posts/posts_list_widget.dart';
 import 'package:flutter_mobile_app/util/database.dart';
@@ -12,10 +13,45 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final DatabaseHelper _databaseHelper = DatabaseHelper.instance;
+  late Timer timer;
+  late Future<String> temperatureValue;
+  late Future<String> oxygenValue;
+  late Future<String> bpmValue;
+
+  @override
+  void initState() {
+    super.initState();
+    temperatureValue = _databaseHelper.queryFirstValue(DatabaseHelper.temperatureTable);
+    oxygenValue = _databaseHelper.queryFirstValue(DatabaseHelper.oxygenTable);
+    bpmValue = _databaseHelper.queryFirstValue(DatabaseHelper.bpmTable);
+
+    timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      temperatureValue = _databaseHelper.queryFirstValue(DatabaseHelper.temperatureTable);
+      oxygenValue = _databaseHelper.queryFirstValue(DatabaseHelper.oxygenTable);
+      bpmValue = _databaseHelper.queryFirstValue(DatabaseHelper.bpmTable);
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
+  Future<String> _returnDisplayValue(String table) {
+    if (table == DatabaseHelper.temperatureTable) {
+      return temperatureValue;
+    }
+    if (table == DatabaseHelper.oxygenTable) {
+      return oxygenValue;
+    }
+    return bpmValue;
+  }
 
   Widget buildFutureStatDisplay(String table) {
     return FutureBuilder(
-        future: _databaseHelper.queryFirstValue(table),
+        future: _returnDisplayValue(table),
         initialData: "Loading...",
         builder: (BuildContext context, AsyncSnapshot<String> object) {
           return Text(

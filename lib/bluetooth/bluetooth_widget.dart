@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
@@ -22,6 +24,7 @@ class _BluetoothWidgetState extends State<BluetoothWidget> {
   BluetoothConnection? connection;
   bool get isArduinoConnected =>
       connection != null ? connection!.isConnected : false;
+  StreamSubscription? connectionSubscription;
 
   // Arduino Device Related
   BluetoothDevice? _connectedDevice;
@@ -255,9 +258,10 @@ class _BluetoothWidgetState extends State<BluetoothWidget> {
                     backgroundColor: MaterialStateProperty.all(Colors.red[400]),
                   ),
                   onPressed: () {
+                    connectionSubscription ??= connection!.input!.listen((data) => {});
                     connection != null
                         ? context
-                            .navigateTo(WaveformWidget(connection: connection!))
+                            .navigateTo(WaveformWidget(connection: connectionSubscription!))
                         : showMessage(context, "Connection is not available");
                   },
                 ),

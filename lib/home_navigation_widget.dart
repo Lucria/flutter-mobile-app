@@ -37,8 +37,7 @@ class HomeTabNavigationWidget extends StatelessWidget {
               padding: const EdgeInsets.only(right: 20.0),
               child: GestureDetector(
                 onTap: () {
-                  String userEmail = FirebaseAuth.instance.currentUser!.email!;
-                  showMessage(context, 'Signed in as: $userEmail');
+                  context.navigateTo(const ProfileRouter());
                 },
                 child: const Icon(
                   Icons.account_circle_outlined,
@@ -55,6 +54,7 @@ class HomeTabNavigationWidget extends StatelessWidget {
         ReliefRouter(),
         GameRouter(),
         BluetoothRouter(),
+        ProfileRouter(),
       ],
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.navigateTo(const BluetoothRouter()),

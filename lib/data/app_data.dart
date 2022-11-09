@@ -107,14 +107,33 @@ class Post {
       this.articleChunks);
 }
 
-class User {
-  static final users = [
-    User(Colors.amberAccent, 1),
-    User(Colors.blue, 2),
-    User(Colors.pinkAccent, 3),
-  ];
-  final Color color;
-  final int id;
+class CelloUser {
+  int? age;
+  String? email;
+  String? firstName;
+  String? lastName;
+  int? height;
+  int? weight;
+  String? gender;
 
-  User(this.color, this.id);
+  CelloUser(this.age, this.email, this.firstName, this.lastName, this.height, this.weight);
+  CelloUser.fromMap(Map result) {
+    age = result["age"];
+    email = result["email"];
+    firstName = result["first_name"];
+    lastName = result["last_name"];
+    height = result["height"];
+    weight = result["weight"];
+    gender = result["gender"];
+  }
+
+  Map<String, dynamic> toMap() => {
+    'age': age,
+    'email': email,
+    'first_name': firstName,
+    'last_name': lastName,
+    'height': height,
+    'weight': weight,
+    'gender': gender,
+  };
 }

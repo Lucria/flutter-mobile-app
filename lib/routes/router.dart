@@ -14,6 +14,7 @@ import 'package:flutter_mobile_app/relief/relief_page.dart';
 import 'package:flutter_mobile_app/login/welcome_page.dart';
 import 'package:flutter_mobile_app/relief/emergency_screen.dart';
 import 'package:flutter_mobile_app/activity/activity_page.dart';
+import 'package:flutter_mobile_app/util/user_profile_page.dart';
 
 @MaterialAutoRouter(
   replaceInRouteName: 'Page,Route',
@@ -77,6 +78,17 @@ import 'package:flutter_mobile_app/activity/activity_page.dart';
               )
             ]
         ),
+        AutoRoute(
+            path: 'profile',
+            name: 'ProfileRouter',
+            page: EmptyRouterPage,
+            children: [
+              AutoRoute(
+                path: '',
+                page: UserProfilePage
+              )
+            ]
+        )
       ]),
     ]),
   ],

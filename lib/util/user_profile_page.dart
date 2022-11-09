@@ -59,7 +59,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     elevation: 4,
                     semanticContainer: true,
                     margin: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 100),
+                        vertical: 8.0, horizontal: 80),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -87,7 +87,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     elevation: 4,
                     semanticContainer: true,
                     margin: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 100),
+                        vertical: 8.0, horizontal: 80),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -114,7 +114,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     elevation: 4,
                     semanticContainer: true,
                     margin: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 100),
+                        vertical: 8.0, horizontal: 80),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -141,7 +141,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     elevation: 4,
                     semanticContainer: true,
                     margin: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 100),
+                        vertical: 8.0, horizontal: 80),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -168,7 +168,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     elevation: 4,
                     semanticContainer: true,
                     margin: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 100),
+                        vertical: 8.0, horizontal: 80),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [

@@ -12,7 +12,7 @@ class UserProfilePage extends StatefulWidget {
 
 class _UserProfilePageState extends State<UserProfilePage> {
   CelloUser _currentUser =
-      CelloUser(18, "loading@gmail.com", "loading", "loading", 0, 0);
+      CelloUser(18, "loading@gmail.com", "loading", "loading", 0, 0, 'Female');
 
   Future<List<CelloUser>> getAllUsers() async {
     return (await FirebaseFirestore.instance.collection("/users").get())

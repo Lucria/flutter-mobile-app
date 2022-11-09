@@ -116,7 +116,7 @@ class CelloUser {
   int? weight;
   String? gender;
 
-  CelloUser(this.age, this.email, this.firstName, this.lastName, this.height, this.weight);
+  CelloUser(this.age, this.email, this.firstName, this.lastName, this.height, this.weight, this.gender);
   CelloUser.fromMap(Map result) {
     age = result["age"];
     email = result["email"];

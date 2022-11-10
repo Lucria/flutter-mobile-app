@@ -159,7 +159,7 @@ class DatabaseHelper {
 
   Future<List<BpmData>> queryAllBpmData() async {
     Database db = await instance.database;
-    var results = await db.query(bpmTable, limit: 300, orderBy: "_id DESC");
+    var results = await db.query(bpmTable, limit: 50, orderBy: "_id DESC");
     return results.map((result) => BpmData.fromMap(result)).toList();
   }
 
